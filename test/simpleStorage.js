@@ -17,4 +17,11 @@ describe("SimpleStorage", () => {
     //compare values
     assert.equal(currValeu.toString(), expectedValue);
   });
+  it("should update when we call store", async () => {
+    const storeRes = await storage.store(7);
+    const expectedValue = "7";
+    await storeRes.wait(1);
+    const currValeu = await storage.retrieve();
+    assert.equal(currValeu.toString(), expectedValue);
+  });
 });
