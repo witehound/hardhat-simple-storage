@@ -8,7 +8,20 @@ async function main() {
   await storage.deployed();
   console.log(`Deployed Contract to ${storage.address}`);
 
-  if (hre.network.config.chainId != 31337 && process.env.ETHER_KEYS) verify();
+  if (hre.network.config.chainId != 31337 && process.env.ETHER_KEYS) {
+    await storage.deployTransaction.wait(6);
+    await verify();
+  }
+
+  //Contract interaction
+  const currValue = await storage.retrieve();
+  console.log(`Currennt Value is : ${currValue}`);
+
+  //Uupdate the cuurrent value
+  const transactionRes = await storage.store(7);
+  await transactionRes.wait(1);
+  const updatedValue = await storage.retrieve();
+  console.log(`Currennt Value is : ${updatedValue}`);
 }
 
 //verify deployed contract
